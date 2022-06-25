@@ -8,6 +8,10 @@ struct{
     char p[TAM];
     char r[TAM];
     char resp[TAM];
+    int nline;
+    int ncolun;
+    int horiz;
+    int verti;
 }perguntas[TAM];
 
 void fpergunta(){ //é o bagulete que lê as perguntas, mas falta fazer ele entender espaço e etc, mas ao menos as palavras de vários caracteres ele já consegue entender de buenas
@@ -48,14 +52,38 @@ void fpergunta(){ //é o bagulete que lê as perguntas, mas falta fazer ele ente
                                 printf("A palavra não pode ser colocada na vertical. A palavra será colocada na horizontal\n");
                               printf("Digite em qual linha deve ser colocada a palavra\n");
                               scanf("%d",&line);
+                              perguntas[i].nline=(line-1);
+                              perguntas[i].horiz=1;
                             for(int h=0; h<tam; h++){
                                 res[line-1][h]=pt[h];
                                 }
                             }
                             printf("Em qual coluna a palavra deve ser inserida?\n");
                                 scanf("%d",&colun);
+                                perguntas[i].ncolun=(colun-1);
+                                perguntas[i].verti=1;
                             for(int b=0;b<tam;b++){
                                 res[b][colun-1]=pt[b];
+                                 }
+                            }
+                            if(e==2){
+                            int line, colun;
+                            if(tam>y){
+                                printf("A palavra não pode ser colocada na horizontal. A palavra será colocada na vertical\n");
+                              printf("Digite em qual coluna deve ser colocada a palavra\n");
+                              scanf("%d",&colun);
+                              perguntas[i].ncolun=(colun-1);
+                              perguntas[i].verti=1;
+                            for(int h=0; h<tam; h++){
+                                res[h][colun-1]=pt[h];
+                                }
+                            }
+                            printf("Em qual linha a palavra deve ser inserida?\n");
+                                scanf("%d",&line);
+                                perguntas[i].nline=(line-1);
+                                perguntas[i].horiz=1;
+                            for(int b=0;b<tam;b++){
+                                res[line-1][b]=pt[b];
                                  }
                             }
                         }
@@ -81,21 +109,27 @@ void jogar(){
         char t='_';
         int e, tamR,jogadas;
         jogadas=0;
-    do{
-    for(int i=0; i<x; i++){
+        for(int i=0; i<x; i++){
         for(int j=0; j<y; j++){
             m[i][j]=t;
             printf("%c\t", m[i][j]);
         }printf("\n");
     }
+    do{
     printf("As perguntas são:\n");
     for(int w=0; w<k; w++){
         printf("%d.%s\n", w, perguntas[w].p);
     }
     printf("Qual pergunta você deseja responder?\n");
         scanf("%d", &e);
-    comparar(e,perguntas[e].r, perguntas[e].resp);
-    jogadas++;
+    comparar(e);
+    sub(e, m);
+
+        for(int i=0; i<x; i++){
+            for(int j=0; j<y; j++){
+                printf("%c\t", m[i][j]);
+            }printf("\n");
+        }
     }while(jogadas<k);
 }
 
@@ -107,7 +141,6 @@ void comparar(int e){
         t=strcmp(perguntas[e].resp, perguntas[e].r);
     if(t==0){
         printf("Deu bom\n");
-        jogar();
     }
     if(t!=0){
         printf("Resposta errada. Escolha:\n1.Tentar novamente\n2.Trocar de pergunta\n");
@@ -122,7 +155,18 @@ void comparar(int e){
             if(e1==2)
             jogar();
     }
-
+    
+}
+void sub(int e, char m[x][y]){
+    char *psub;
+    int tam, n;
+        tam=strlen(perguntas[e].resp);
+        psub=&perguntas[e].resp;
+            if(perguntas[e].verti==1){
+                for(int h=0; h<tam; h++){
+                    m[h][perguntas[e].ncolun]=psub[h];
+                }
+            }
 }
 int main() {
     int n;
@@ -134,7 +178,7 @@ int main() {
                     fpergunta();
                     main();// eu botei um "main()" em vez de um "break;" porque aí assim que acaba de fazer a função do negócio, ele volta pro começo do main, aí a gente evita ter que fazer coisa de loop e pipipipopopo
                 case 2:
-                    fprintar(k);
+                    fprintar();
                     main();
                 case 3:
                     jogar();
