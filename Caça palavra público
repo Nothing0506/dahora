@@ -94,7 +94,7 @@ void fpergunta(){ //é o bagulete que lê as perguntas, mas falta fazer ele ente
             }printf("\n");
         }        
 }
-void fprintar(){// é a função pra printar as perguntas que já foram digitadas e as respostas tmb.Mas vai ter que usar aquele negócio de memoria dinâmica pq as vezes a pergunta tem menos caractere que o tamanho do vetor, então tem que "cortar" o vetor antes disso(cortar no caso é fazer ele não printar o que não tem informação)
+void fprintar(){// é a função pra printar as perguntas que já foram digitadas e as respostas tmb.
         printf("As perguntas são:\n");
             for(int i=0; i<k; i++){
                 printf("%s\n", perguntas[i].p);
@@ -122,18 +122,17 @@ void jogar(){
     }
     printf("Qual pergunta você deseja responder?\n");
         scanf("%d", &e);
-    comparar(e);
-    sub(e, m);
-
+    comparar(e,m);
         for(int i=0; i<x; i++){
             for(int j=0; j<y; j++){
                 printf("%c\t", m[i][j]);
             }printf("\n");
         }
+        jogadas++;
     }while(jogadas<k);
 }
 
-void comparar(int e){
+void comparar(int e, char m[x][y]){
     int t, e1;
     printf("%s\n", perguntas[e].p);
     printf("Digite a resposta da pergunta\n");
@@ -141,21 +140,32 @@ void comparar(int e){
         t=strcmp(perguntas[e].resp, perguntas[e].r);
     if(t==0){
         printf("Deu bom\n");
+        sub(e,m);
     }
     if(t!=0){
         printf("Resposta errada. Escolha:\n1.Tentar novamente\n2.Trocar de pergunta\n");
         scanf("%d",&e1);
             if(e1==1){
+                int e2;
                 do{ //TENTAR USAR SWITCH DEPOIS MEU FRIENDO
                     printf("Digite a resposta novamente\n");
                     scanf("%s", perguntas[e].resp);
                     t=strcmp(perguntas[e].resp, perguntas[e].r);
-                }while(t!=0);
+                    if(t!=0){
+                        printf("Resposta errada\n");
+                        printf("Você deseja tentar novamente?\n1:Sim\n2:Não\n");
+                        scanf("%d", &e2);
+                    }
+                    if(t==0){
+                        sub(e,m);
+                        break;
+                    }
+                }while(t==1 || e2==1);
             }
-            if(e1==2)
-            jogar();
+            if(e1==2){
+            printf("Obrigado pela escolha\n");
+        }
     }
-    
 }
 void sub(int e, char m[x][y]){
     char *psub;
@@ -165,6 +175,11 @@ void sub(int e, char m[x][y]){
             if(perguntas[e].verti==1){
                 for(int h=0; h<tam; h++){
                     m[h][perguntas[e].ncolun]=psub[h];
+                }
+            }
+            if(perguntas[e].horiz==1){
+                for(int c=0; c<tam; c++){
+                    m[perguntas[e].nline][c]=psub[c];
                 }
             }
 }
