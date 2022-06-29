@@ -1,7 +1,10 @@
-#include<stdlib.h>
+//alterado no pro aluno 
+//tamanho das respostas arrumado e escolha de vertical e horiz
+//falta colocar caso n de p por na matriz p digitar outra vez ou mudar a matriz 
+#include <stdlib.h>
 #include <stdio.h>
-#include<string.h>
-#define TAM 20
+#include <string.h>
+#define   TAM 20
 
 int k,x,y;
 struct{
@@ -39,17 +42,21 @@ void fpergunta(){ //é o bagulete que lê as perguntas, mas falta fazer ele ente
                         scanf("%s",perguntas[i].r);
                         tam=strlen(perguntas[i].r);
                         pt=&perguntas[i].r;
-                        printf("A a palavra deve ser colocada na horizontal ou na vertical?\n");
+                        if (tam>y && tam>x){
+                            printf("\nA palavra eh maior que o espaco de jogo estabelecido. Escolha outra ou reinicie para novo espaco\n");
+                            scanf ("%s", perguntas[i].r);
+                        }
+                        printf("A palavra deve ser colocada na horizontal ou na vertical?\n");
                         printf("1:vertical\n2:horizontal\n");
                             scanf("%d",&e);
-                        if(e>2){
+                        if(e!=2 && e!=1){
                             do{
                                 printf("Não é uma escolha. Digite novamente\n");
                                 scanf("%d",&e);
-                            }while(e>2);
+                            }while(e!=2 && e!=1);
                         }
                         if(e==1){
-                            if(tam>y){
+                            if(tam>x && tam<=y){
                                 printf("A palavra não pode ser colocada na vertical. A palavra será colocada na horizontal\n");
                               printf("Digite em qual linha deve ser colocada a palavra\n");
                               scanf("%d",&line);
@@ -59,26 +66,19 @@ void fpergunta(){ //é o bagulete que lê as perguntas, mas falta fazer ele ente
                                 res[line-1][h]=pt[h];
                                 }
                             }
+                            if (tam<=x){
                             printf("Em qual coluna a palavra deve ser inserida?\n");
                                 scanf("%d",&colun);
-                            for(int roda=0; roda<=line; roda++){
-                                if(salvadorC[roda]==colun){
-                                  do{
-                                      printf("Já utilizado, escolha outro\n");
-                                      scanf("%d",&colun);
-                                  }while(salvadorC[roda]==colun);
-                              }
-                            }
-                              salvadorC[i]=colun;
-                                perguntas[i].ncolun=(colun-1);
+                                 perguntas[i].ncolun=(colun-1);
                                 perguntas[i].verti=1;
-                            for(int b=0;b<tam;b++){
-                                res[b][colun-1]=pt[b];
-                                 }
+                            for(int p=0; p<tam; p++){
+                                res[p][colun-1]=pt[p];
+                                }
                             }
+                        }
                             if(e==2){
-                            if(tam>y){
-                                printf("A palavra não pode ser colocada na horizontal. A palavra será colocada na vertical\n");
+                            if(tam>y && tam<=x){
+                                printf("A palavra não pode ser colocada na horizontal. A palavra será colocada na vertical.\n");
                               printf("Digite em qual coluna deve ser colocada a palavra\n");
                               scanf("%d",&colun);
                               perguntas[i].ncolun=(colun-1);
@@ -86,20 +86,22 @@ void fpergunta(){ //é o bagulete que lê as perguntas, mas falta fazer ele ente
                             for(int h=0; h<tam; h++){
                                 res[h][colun-1]=pt[h];
                                 }
-                            }
-                            printf("Em qual linha a palavra deve ser inserida?\n");
+                            } 
+                            if(tam<=y){
+                                printf("Em qual linha a palavra deve ser inserida?\n");
                                 scanf("%d",&line);
                                 perguntas[i].nline=(line-1);
-                                perguntas[i].horiz=1;
-                            for(int b=0;b<tam;b++){
-                                res[line-1][b]=pt[b];
-                                 }
+                              perguntas[i].horiz=1;
+                            for(int u=0; u<tam; u++){
+                                res[line-1][u]=pt[u];
+                                    }
+                                }
                             }
                         }
     printf("A resposta na matriz está na seguinte forma:\n");
-        for(int i=0; i<x; i++){
+        for(int v=0; v<x; v++){
             for(int j=0; j<y; j++){
-            printf("%c\t", res[i][j]);
+            printf("%c\t", res[v][j]);
             }printf("\n");
         }        
 }
@@ -209,3 +211,18 @@ int main() {
                     main();
             }
 }
+
+//  for(int roda=0; roda<=colun; roda++){
+                             //   if(salvadorC[roda]==colun){
+                               //   do{
+                               //       printf("Já utilizado, escolha outro\n");
+                               //       scanf("%d",&colun);
+                              //    }while(salvadorC[roda]==colun);
+                            //  }
+                          //  }
+                           //   salvadorC[i]=colun;
+                           //     perguntas[i].ncolun=(colun-1);
+                           //     perguntas[i].verti=1;
+                          //  for(int b=0;b<tam;b++){
+                             //   res[b][colun-1]=pt[b];
+                              //   }
