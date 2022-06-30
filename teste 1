@@ -1,9 +1,14 @@
-#include<stdlib.h>
+//alterado no pro aluno 
+//tamanho das respostas arrumado e escolha de vertical e horiz
+//falta colocar caso n de p por na matriz p digitar outra vez ou mudar a matriz 
+//LISTA DE BUGS:
+//adicionar : respostas n podem ser maiores q numero de linhas ou colunas 
+#include <stdlib.h>
 #include <stdio.h>
-#include<string.h>
-#define TAM 20
+#include <string.h>
+#define   TAM 20
 
-int k,x,y;
+int k,x,y, jogadas;
 struct{
     char p[TAM];
     char r[TAM];
@@ -16,12 +21,19 @@ struct{
 
 void fpergunta(){ //é o bagulete que lê as perguntas, mas falta fazer ele entender espaço e etc, mas ao menos as palavras de vários caracteres ele já consegue entender de buenas
     int tam,e,i;
-    int line, colun;
+    int salvadorC[TAM];
+    int line, colun, maior;
     char *pt;
         printf("Quantas linhas tem o palavra-cruzada?\n");
             scanf("%d", &x);
         printf("Quantas colunas tem o jogo?\n");
             scanf("%d", &y);
+            maior =0;
+            if(y>maior)
+            maior=y;
+            if(x>maior)
+            maior=x;
+
              char res[x][y];
              for(int w=0; w<x; w++){
                  for(int p=0; p<y; p++){
@@ -38,66 +50,101 @@ void fpergunta(){ //é o bagulete que lê as perguntas, mas falta fazer ele ente
                         scanf("%s",perguntas[i].r);
                         tam=strlen(perguntas[i].r);
                         pt=&perguntas[i].r;
-                        printf("A a palavra deve ser colocada na horizontal ou na vertical?\n");
+                        if (tam>maior){
+                            do{
+                            printf("\nA palavra eh maior que o espaco de jogo estabelecido. Escolha outra palavra\n");
+                            scanf ("%s", perguntas[i].r);
+                            tam=strlen(perguntas[i].r);
+                            }while(tam>maior);
+                        }
+                        printf("A palavra deve ser colocada na horizontal ou na vertical?\n");
                         printf("1:vertical\n2:horizontal\n");
                             scanf("%d",&e);
-                        if(e>2){
+                        if(e!=2 && e!=1){
                             do{
                                 printf("Não é uma escolha. Digite novamente\n");
                                 scanf("%d",&e);
-                            }while(e>2);
+                            }while(e!=2 && e!=1);
                         }
                         if(e==1){
-                            if(tam>y){
+                            if(tam>x && tam<=y){
                                 printf("A palavra não pode ser colocada na vertical. A palavra será colocada na horizontal\n");
                               printf("Digite em qual linha deve ser colocada a palavra\n");
                               scanf("%d",&line);
+                              for(int roda=0; roda<line; roda++){
+                                if(perguntas[roda].nline==line-1 && perguntas[roda].horiz==1){
+                                    do{
+                                    printf("Essa linha já foi escolhida. Digite outra\n");
+                                    scanf("%d", &line);
+                                    }while(perguntas[roda].nline==(line-1));
+                                }
+                              }
                               perguntas[i].nline=(line-1);
                               perguntas[i].horiz=1;
                             for(int h=0; h<tam; h++){
                                 res[line-1][h]=pt[h];
                                 }
                             }
+                            if (tam<=x){
                             printf("Em qual coluna a palavra deve ser inserida?\n");
                                 scanf("%d",&colun);
-                            for(int roda=0; roda<=colun; roda++){
+                                for(int roda=0; roda<colun; roda++){
                                 if(perguntas[roda].ncolun==colun-1 && perguntas[roda].verti==1){
-                                  do{
-                                      printf("Já utilizado, escolha outro\n");
-                                      scanf("%d",&colun);
-                                  }while(perguntas[roda].ncolun==colun-1);
+                                    do{
+                                    printf("Essa coluna já foi escolhida. Digite outra\n");
+                                    scanf("%d", &colun);
+                                    }while(perguntas[roda].ncolun==(colun-1));
+                                }
                               }
-                            }
-                                perguntas[i].ncolun=(colun-1);
+                                 perguntas[i].ncolun=(colun-1);
                                 perguntas[i].verti=1;
-                            for(int b=0;b<tam;b++){
-                                res[b][colun-1]=pt[b];
-                                 }
+                            for(int p=0; p<tam; p++){
+                                res[p][colun-1]=pt[p];
+                                }
                             }
+                        }
                             if(e==2){
-                            if(tam>y){
-                                printf("A palavra não pode ser colocada na horizontal. A palavra será colocada na vertical\n");
+                            if(tam>y && tam<=x){
+                                printf("A palavra não pode ser colocada na horizontal. A palavra será colocada na vertical.\n");
                               printf("Digite em qual coluna deve ser colocada a palavra\n");
                               scanf("%d",&colun);
+                              for(int roda=0; roda<line; roda++){
+                                if(perguntas[roda].nline==line-1 && perguntas[roda].horiz==1){
+                                    do{
+                                    printf("Essa linha já foi escolhida. Digite outra\n");
+                                    scanf("%d", &line);
+                                    }while(perguntas[roda].nline==(line-1));
+                                }
+                              }
                               perguntas[i].ncolun=(colun-1);
                               perguntas[i].verti=1;
                             for(int h=0; h<tam; h++){
                                 res[h][colun-1]=pt[h];
                                 }
-                            }
-                            printf("Em qual linha a palavra deve ser inserida?\n");
+                            } 
+                            if(tam<=y){
+                                printf("Em qual linha a palavra deve ser inserida?\n");
                                 scanf("%d",&line);
+                                for(int roda=0; roda<line; roda++){
+                                if(perguntas[roda].nline==line-1 && perguntas[roda].horiz==1){
+                                    do{
+                                    printf("Essa linha já foi escolhida. Digite outra\n");
+                                    scanf("%d", &line);
+                                    }while(perguntas[roda].nline==(line-1));
+                                }
+                              }
                                 perguntas[i].nline=(line-1);
-                                perguntas[i].horiz=1;
-                            for(int b=0;b<tam;b++){
-                                res[line-1][b]=pt[b];
-                                 }
+                              perguntas[i].horiz=1;
+                            for(int u=0; u<tam; u++){
+                                res[line-1][u]=pt[u];
+                                    }
+                                }
                             }
                         }
     printf("A resposta na matriz está na seguinte forma:\n");
-        for(int i=0; i<x; i++){
+        for(int v=0; v<x; v++){
             for(int j=0; j<y; j++){
-            printf("%c\t", res[i][j]);
+            printf("%c\t", res[v][j]);
             }printf("\n");
         }        
 }
@@ -112,9 +159,10 @@ void fprintar(){// é a função pra printar as perguntas que já foram digitada
             }
 }
 void jogar(){
+    jogadas=0;
     char m[x][y];
         char t='_';
-        int e, tamR,jogadas;
+        int e, tamR;
         jogadas=0;
         for(int i=0; i<x; i++){
         for(int j=0; j<y; j++){
@@ -135,8 +183,8 @@ void jogar(){
                 printf("%c\t", m[i][j]);
             }printf("\n");
         }
-        jogadas++;
     }while(jogadas<k);
+        printf("Parabéns, você ganhou!\n");
 }
 
 void comparar(int e, char m[x][y]){
@@ -148,6 +196,7 @@ void comparar(int e, char m[x][y]){
     if(t==0){
         printf("Deu bom\n");
         sub(e,m);
+        jogadas++;
     }
     if(t!=0){
         printf("Resposta errada. Escolha:\n1.Tentar novamente\n2.Trocar de pergunta\n");
@@ -165,6 +214,7 @@ void comparar(int e, char m[x][y]){
                     }
                     if(t==0){
                         sub(e,m);
+                        jogadas++;
                         break;
                     }
                 }while(t==1 || e2==1);
@@ -207,3 +257,18 @@ int main() {
                     main();
             }
 }
+
+//  for(int roda=0; roda<=colun; roda++){
+                             //   if(salvadorC[roda]==colun){
+                               //   do{
+                               //       printf("Já utilizado, escolha outro\n");
+                               //       scanf("%d",&colun);
+                              //    }while(salvadorC[roda]==colun);
+                            //  }
+                          //  }
+                           //   salvadorC[i]=colun;
+                           //     perguntas[i].ncolun=(colun-1);
+                           //     perguntas[i].verti=1;
+                          //  for(int b=0;b<tam;b++){
+                             //   res[b][colun-1]=pt[b];
+                              //   }
