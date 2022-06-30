@@ -1,8 +1,5 @@
-//alterado no pro aluno 
-//tamanho das respostas arrumado e escolha de vertical e horiz
 //falta colocar caso n de p por na matriz p digitar outra vez ou mudar a matriz 
-//LISTA DE BUGS:
-//adicionar : respostas n podem ser maiores q numero de linhas ou colunas 
+//LISTA DE BUGS: nao sei onde tem bug
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -21,7 +18,6 @@ struct{
 
 void fpergunta(){ //é o bagulete que lê as perguntas, mas falta fazer ele entender espaço e etc, mas ao menos as palavras de vários caracteres ele já consegue entender de buenas
     int tam,e,i;
-    int salvadorC[TAM];
     int line, colun, maior;
     char *pt;
         printf("Quantas linhas tem o palavra-cruzada?\n");
@@ -158,7 +154,7 @@ void fprintar(){// é a função pra printar as perguntas que já foram digitada
                 printf("%s\n", perguntas[i].r);
             }
 }
-void jogar(){
+void jogar(){//aqui é onde acontece o jogo, essa função depende tanto do comparar, que eu já expliquei logo abaixo o que é, quanto do sub, que eu tmb já expliquei o que faz mais pra baixo.
     jogadas=0;
     char m[x][y];
         char t='_';
@@ -186,8 +182,7 @@ void jogar(){
     }while(jogadas<k);
         printf("Parabéns, você ganhou!\n");
 }
-
-void comparar(int e, char m[x][y]){
+void comparar(int e, char m[x][y]){//aqui é a função que ele compara a resposta inserida pelo jogador com a resposta real, se bater, ele printa na matriz M, se não, aí deu merda
     int t, e1;
     printf("%s\n", perguntas[e].p);
     printf("Digite a resposta da pergunta\n");
@@ -203,7 +198,7 @@ void comparar(int e, char m[x][y]){
         scanf("%d",&e1);
             if(e1==1){
                 int e2;
-                do{ //TENTAR USAR SWITCH DEPOIS MEU FRIENDO
+                do{ 
                     printf("Digite a resposta novamente\n");
                     scanf("%s", perguntas[e].resp);
                     t=strcmp(perguntas[e].resp, perguntas[e].r);
@@ -224,7 +219,7 @@ void comparar(int e, char m[x][y]){
         }
     }
 }
-void sub(int e, char m[x][y]){
+void sub(int e, char m[x][y]){//aqui é a parte do código que faz ele printar a resposta inserida na matriz de jogadas 
     char *psub;
     int tam, n;
         tam=strlen(perguntas[e].resp);
@@ -257,18 +252,3 @@ int main() {
                     main();
             }
 }
-
-//  for(int roda=0; roda<=colun; roda++){
-                             //   if(salvadorC[roda]==colun){
-                               //   do{
-                               //       printf("Já utilizado, escolha outro\n");
-                               //       scanf("%d",&colun);
-                              //    }while(salvadorC[roda]==colun);
-                            //  }
-                          //  }
-                           //   salvadorC[i]=colun;
-                           //     perguntas[i].ncolun=(colun-1);
-                           //     perguntas[i].verti=1;
-                          //  for(int b=0;b<tam;b++){
-                             //   res[b][colun-1]=pt[b];
-                              //   }
